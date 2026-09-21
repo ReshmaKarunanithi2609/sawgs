@@ -24,12 +24,23 @@ pipeline {
                 bat 'mvn test'
             }
         }
+        stage('Repeat'){
+                   steps{
+                      script{
+                         for(int i=1; i<5;i++) {
+                            echo"Run number ${i}"
+                            bat 'mvn test'
+                            sleep 5
+                       }
+                  }
+              }
+          }
     }
 
     post {
         success {
             emailext(
-                to: 'reshmakiaq@gmail.com',
+                to: 'reshmak.kiaq@gmail.com',
                 subject: "Jenkins SUCCESS - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """Build completed successfully.
 
@@ -42,7 +53,7 @@ Build URL: ${env.BUILD_URL}
 
         failure {
             emailext(
-                to: 'reshmakiaq@gmail.com',
+                to: 'reshmak.kiaq@gmail.com',
                 subject: "Jenkins FAILED - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """Build failed.
 Job: ${env.JOB_NAME}
